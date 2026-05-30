@@ -5,8 +5,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 import PreviewPane from './components/PreviewPane';
 import BuilderPane from './components/BuilderPane';
 import TemplateSelector from './components/TemplateSelector';
@@ -82,72 +80,10 @@ export default function App() {
 
   const downloadPDF = async () => {
     setIsCompiling(true);
-    setToastMessage("Preparing PDF Document... This may take a moment.");
+    setToastMessage("Preparing Print Dialog...");
     
-    setTimeout(async () => {
-      try {
-        const element = printRef.current;
-        if (!element) {
-          throw new Error("Preview pane not found");
-        }
-        
-        const originalTransform = element.style.transform;
-        element.style.transform = 'none';
-
-        // Ensure element is visible
-        const canvas = await html2canvas(element, {
-          scale: 4, // High-res PDF
-          useCORS: true,
-          logging: false,
-          windowWidth: element.scrollWidth,
-          windowHeight: element.scrollHeight
-        });
-        
-        element.style.transform = originalTransform;
-        
-        const imgData = canvas.toDataURL('image/jpeg', 0.95);
-        const pdf = new jsPDF({
-          orientation: 'portrait',
-          unit: 'mm',
-          format: 'a4'
-        });
-        
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        
-        let position = 0;
-        let leftHeight = pdfHeight;
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        
-        pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
-        leftHeight -= pageHeight;
-        
-        while (leftHeight > 0) {
-          position = leftHeight - pdfHeight;
-          pdf.addPage();
-          pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
-          leftHeight -= pageHeight;
-        }
-        
-        pdf.save('AcademiCV_Export.pdf');
-        
-        setToastMessage("PDF downloaded successfully.");
-        // Try native print as bonus if outside iframe
-        if (window.self === window.top) {
-           handlePrintAction();
-        }
-      } catch (err) {
-        console.error(err);
-        setToastMessage("Failed to generate PDF. Trying native print...");
-        if (window.self === window.top) {
-           handlePrintAction();
-        } else {
-           setToastMessage("Failed to generate PDF. Please open in a new tab to use native print.");
-        }
-      } finally {
-        setTimeout(() => setToastMessage(''), 5000);
-        setIsCompiling(false);
-      }
+    setTimeout(() => {
+      handlePrintAction();
     }, 100);
   };
 
@@ -214,7 +150,7 @@ export default function App() {
             ) : (
               <Download className="w-4 h-4" />
             )}
-            {isCompiling ? 'Compiling PDF...' : 'Download PDF'}
+            {isCompiling ? 'Preparing...' : 'Print / Save PDF'}
           </button>
         </div>
       </header>
