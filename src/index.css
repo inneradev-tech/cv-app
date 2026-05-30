@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@media print {
+    @page {
+      size: A4;
+      margin: 15mm 20mm;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: auto !important;
+      min-height: 100% !important;
+      background: white !important;
+    }
+  
+    /* Hide everything except the print document */
+    .no-print, nav, .shrink-0 {
+      display: none !important;
+    }
+  
+    #root, .print-area-wrapper, main {
+      display: block !important;
+      position: relative !important;
+      height: auto !important;
+      min-height: 100% !important;
+      overflow: visible !important;
+      background: white !important;
+    }
+  
+    #print-document {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      border: none !important;
+      max-width: none !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      background: white !important;
+      transform: none !important;
+      position: static !important;
+    }
+    
+    .break-inside-avoid {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+    
+    .break-after-avoid, h1, h2, h3, h4, h5, h6 {
+      break-after: avoid !important;
+      page-break-after: avoid !important;
+    }
+    
+    p, ul, ol, li {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    /* Keep background colors for badges when printing to PDF in Webkit browsers */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+}

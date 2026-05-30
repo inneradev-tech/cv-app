@@ -1,0 +1,6 @@
+{
+  "name": "AcademiCV",
+  "description": "An AI-powered LaTeX CV builder designed strictly for academic positions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
